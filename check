@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler'
+
+Bundler.require(:default)
+
+set = Set.new
+duplicates = 0
+100_000.times do
+  school = Faker::Educator.unique.secondary_school
+
+  if set.include?(school)
+    print "D"
+    duplicates += 1
+  else
+    print "."
+    set << school
+  end
+
+rescue Faker::UniqueGenerator::RetryLimitExceeded
+  puts "Ran out of uniqueness for Faker::Educator.unique.secondary_school after #{set.size} iterations"
+  exit
+end
+
+puts
+puts "Duplicates: #{duplicates}"
